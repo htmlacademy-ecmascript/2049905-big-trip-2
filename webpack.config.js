@@ -11,6 +11,9 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+    }),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -20,9 +23,6 @@ module.exports = {
           },
         },
       ],
-    }),
-    new HtmlWebpackPlugin({
-      template: 'public/index.html',
     }),
   ],
   module: {
