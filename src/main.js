@@ -1,4 +1,4 @@
-import { render } from './render.js';
+import { render } from './framework/render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import PointModel from './model/points-model.js';
 import OffersModel from './model/offers-model.js';
@@ -21,7 +21,4 @@ const presenter = new BoardPresenter({
 
 render(new FiltersView(), filtersContainer);
 
-pointModel.init();
-offersModel.init();
-destinationsModel.init();
 presenter.init();

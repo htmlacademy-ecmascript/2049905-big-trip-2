@@ -1,5 +1,5 @@
-import { createElement } from '../render.js';
-import { capitalize, formatDate } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { capitalizeFirstLetter, formatDate } from '../utils.js';
 import { POINT_TYPES } from '../const.js';
 
 const createDestinationTemplate = (destinationInfo) => {
@@ -40,7 +40,8 @@ const createDestinationTemplate = (destinationInfo) => {
 const createEditPointTemplate = (point, offers, destinations) => {
   const { basePrice, dateFrom, dateTo, destination, type } = point;
 
-  const pointOffers = offers.filter((typeOffer) => point.offers.includes(typeOffer.id));
+  const offersByType = offers.find((offer) => offer.type === type).offers;
+  const pointOffers = offersByType.filter((typeOffer) => point.offers.includes(typeOffer.id));
   const destinationInfo = destinations.find((dest) => dest.id === destination);
 
   const pointId = point.id;
@@ -53,18 +54,18 @@ const createEditPointTemplate = (point, offers, destinations) => {
         <input id="${eventTypeId}" class="event__type-input visually-hidden"
           type="radio" name="event-type" value="${pointType}" ${checkedPointType}>
         <label class="event__type-label event__type-label--${pointType}" for="${eventTypeId}">
-          ${capitalize(pointType)}
+          ${capitalizeFirstLetter(pointType)}
         </label>
       </div>`;
   }).join('');
 
 
-  const pointOffersList = offers.length
+  const pointOffersList = offersByType.length
     ? `
     <section class="event__section event__section--offers">
       <h3 class="event__section-title event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-    ${offers.map((offer) => {
+    ${offersByType.map((offer) => {
     const eventOfferId = `event-offer-${offer.title}-${pointId}`;
     const checkedOffers = pointOffers.some((pointOffer) => pointOffer.id === offer.id) ? 'checked' : '';
     return `
@@ -116,11 +117,11 @@ const createEditPointTemplate = (point, offers, destinations) => {
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
             <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text"
-              name="event-start-time" value="${formatDate(dateFrom, 'calendarDate')} ${formatDate(dateFrom, 'time')}">
+              name="event-start-time" value="${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
             <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text"
-              name="event-end-time" value="${formatDate(dateTo, 'calendarDate')} ${formatDate(dateTo, 'time')}">
+              name="event-end-time" value="${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -147,25 +148,37 @@ const createEditPointTemplate = (point, offers, destinations) => {
   );
 };
 
-export default class EditPointView {
-  constructor(point, offers, destinations) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destinations = null;
+  #onFormClick = null;
+  #onSaveBtnSubmit = null;
+
+  constructor({ point, offers, destinations, onFormClick, onSaveBtnSubmit }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#onFormClick = onFormClick;
+    this.#onSaveBtnSubmit = onSaveBtnSubmit;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
+    this.element.addEventListener('submit', this.#saveClickHandler);
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.destinations);
+  get template() {
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFormClick();
+  };
 
-  removeElement() {
-    this.element = null;
-  }
+  #saveClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSaveBtnSubmit();
+  };
 }
