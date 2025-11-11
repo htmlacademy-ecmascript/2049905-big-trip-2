@@ -1,17 +1,18 @@
 import { mockOffers as offers} from '../mock/offers';
 
 export default class OffersModel {
+  #offers = [];
 
   constructor() {
-    this.offers = [];
+    this.#offers = [];
   }
 
   init() {
-    this.offers = offers;
+    this.#offers = offers;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 
   getOffersByType(type) {

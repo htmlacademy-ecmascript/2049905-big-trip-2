@@ -10,12 +10,12 @@ const POINT_TYPES = [
   'restaurant',
 ];
 
-const DATE_FORMAT = {
-  date: 'MMM DD',
-  fullDate: 'YYYY-MM-DD',
-  time: 'HH:mm',
-  fullDateTime: 'YYYY-MM-DDTHH:mm',
-  calendarDate: 'DD/MM/YY',
+const DateFormat = {
+  DATE: 'MMM DD',
+  FULL_DATE: 'YYYY-MM-DD',
+  TIME: 'HH:mm',
+  FULL_DATE_TIME: 'YYYY-MM-DDTHH:mm',
+  CALENDAR_DATE: 'DD/MM/YY',
 };
 
-export { POINT_TYPES, DATE_FORMAT };
+export { POINT_TYPES, DateFormat };

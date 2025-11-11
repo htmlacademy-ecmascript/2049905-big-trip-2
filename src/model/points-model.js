@@ -1,16 +1,17 @@
 import { mockPoints as points } from '../mock/points';
 
 export default class PointsModel {
+  #points = [];
 
   constructor() {
-    this.points = [];
+    this.#points = [];
   }
 
   init() {
-    this.points = points;
+    this.#points = points;
   }
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 }
