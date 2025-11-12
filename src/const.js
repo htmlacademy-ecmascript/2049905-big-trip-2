@@ -18,4 +18,11 @@ const DateFormat = {
   CALENDAR_DATE: 'DD/MM/YY',
 };
 
-export { POINT_TYPES, DateFormat };
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+
+export { POINT_TYPES, DateFormat, FilterType };
