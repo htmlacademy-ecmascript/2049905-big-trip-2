@@ -8,6 +8,21 @@ const MAX_POINTS = 5;
 const getRandomMockPoints = (items) => items.sort(() =>
   Math.random() - 0.5).slice(0, getRandomInteger(MIN_POINTS, MAX_POINTS));
 
+const getRandomTypeAndOffers = () => {
+  const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
+
+  const offers = typeGroup.offers
+    .slice()
+    .sort(() => Math.random() - 0.5)
+    .slice(0, getRandomInteger(0, typeGroup.offers.length))
+    .map((offer) => offer.id);
+
+  return {
+    type: typeGroup.type,
+    offers
+  };
+};
+
 export const mockPoints = [
   {
     id: '1',
@@ -16,15 +31,7 @@ export const mockPoints = [
     dateTo: '2024-07-15T09:48:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: true,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '2',
@@ -33,15 +40,7 @@ export const mockPoints = [
     dateTo: '2025-01-04T10:30:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '3',
@@ -50,15 +49,7 @@ export const mockPoints = [
     dateTo: '2025-11-20T15:10:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: true,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '4',
@@ -67,15 +58,7 @@ export const mockPoints = [
     dateTo: '2025-12-15T09:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '5',
@@ -84,15 +67,7 @@ export const mockPoints = [
     dateTo: '2026-03-27T08:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '6',
@@ -101,15 +76,7 @@ export const mockPoints = [
     dateTo: '2025-11-12T19:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '7',
@@ -118,15 +85,7 @@ export const mockPoints = [
     dateTo: '2022-09-10T23:59:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: true,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '8',
@@ -135,15 +94,7 @@ export const mockPoints = [
     dateTo: '2025-11-13T14:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '9',
@@ -152,15 +103,7 @@ export const mockPoints = [
     dateTo: '2025-05-03T18:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   },
   {
     id: '10',
@@ -169,15 +112,7 @@ export const mockPoints = [
     dateTo: '2025-01-01T00:10:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: true,
-    ...(() => {
-      const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
-      const offers = typeGroup.offers
-        .slice()
-        .sort(() => Math.random() - 0.5)
-        .slice(0, getRandomInteger(0, typeGroup.offers.length))
-        .map((offer) => offer.id);
-      return { type: typeGroup.type, offers };
-    })()
+    ...getRandomTypeAndOffers()
   }
 ];
 
