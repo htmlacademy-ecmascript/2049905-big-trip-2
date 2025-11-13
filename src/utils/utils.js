@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
-import { DateFormat } from './const.js';
+import { DateFormat } from '../const.js';
 
 dayjs.extend(duration);
 dayjs.extend(utc);
 
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -29,6 +29,12 @@ const getDateTimeDifference = (dateFrom, dateTo) => {
   ].filter(Boolean).join(' ');
 };
 
-export { getRandomArrayElement, getRandomInteger, capitalizeFirstLetter, formatDate, getDateTimeDifference};
+export {
+  getRandomInteger,
+  capitalizeFirstLetter,
+  formatDate,
+  getDateTimeDifference,
+  isEscapeKey
+};
 
 

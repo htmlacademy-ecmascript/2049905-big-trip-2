@@ -1,4 +1,5 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger } from '../utils/utils.js';
+
 export const mockOffers = [
   {
     type: 'taxi',
@@ -111,7 +112,13 @@ export const mockOffers = [
   },
   {
     type: 'check-in',
-    offers: []
+    offers: [
+      {
+        id: '1',
+        title: 'Big room',
+        price: getRandomInteger(10, 300)
+      }
+    ]
   },
   {
     type: 'sightseeing',

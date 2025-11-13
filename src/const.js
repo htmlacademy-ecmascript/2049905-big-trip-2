@@ -18,4 +18,18 @@ const DateFormat = {
   CALENDAR_DATE: 'DD/MM/YY',
 };
 
-export { POINT_TYPES, DateFormat };
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+
+const MessageNoPoints = {
+  EVERYTHING: 'Click New Event to create your first point',
+  FUTURE: 'There are no future events now',
+  PRESENT: 'There are no present events now',
+  PAST: 'There are no past events now'
+};
+
+export { POINT_TYPES, DateFormat, FilterType, MessageNoPoints };

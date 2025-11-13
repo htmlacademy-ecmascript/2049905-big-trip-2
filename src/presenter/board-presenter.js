@@ -1,8 +1,10 @@
 import { render, replace } from '../framework/render.js';
+import { isEscapeKey } from '../utils/utils.js';
 import SortingView from '../view/sorting-view.js';
 import PointsListView from '../view/points-list-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
+import NoPointsView from '../view/no-points-view.js';
 
 export default class BoardPresenter {
   #tripEventsContainer = null;
@@ -15,6 +17,7 @@ export default class BoardPresenter {
 
   #sortingComponent = new SortingView();
   #pointsListComponent = new PointsListView();
+  #noPointsComponent = new NoPointsView();
 
   constructor({ tripEventsContainer, pointModel, offersModel, destinationsModel }) {
     this.#tripEventsContainer = tripEventsContainer;
@@ -24,29 +27,34 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#pointModel.init();
-    this.#offersModel.init();
-    this.#destinationsModel.init();
-
     this.#points = this.#pointModel.points;
-    this.#destinations = this.#destinationsModel.destinations;
-    this.#offers = this.#offersModel.offers;
 
-    this.#renderTrip();
+    this.#renderFullTrip();
   }
 
-  #renderTrip() {
+  #renderFullTrip() {
     render(this.#sortingComponent, this.#tripEventsContainer);
     render(this.#pointsListComponent, this.#tripEventsContainer);
 
-    for (let i = 0; i < this.#points.length; i++) {
-      this.#renderPoint(this.#points[i], this.#offers, this.#destinations);
+    if (!this.#points.length) {
+      render(new NoPointsView(), this.#pointsListComponent.element);
+      return;
     }
+
+    for (const point of this.#points) {
+      this.#renderPoint({
+        point,
+        offers: this.#offersModel.getOffersByType(point.type),
+        checkedOffers: this.#offersModel.getOffersById(point.type, point.offers),
+        destination: this.#destinationsModel.getDestinationById(point.destination)
+      });
+    }
+
   }
 
-  #renderPoint(point) {
+  #renderPoint({point, offers, checkedOffers, destination}) {
     const onDocumentKeydown = (evt) => {
-      if (evt.key === 'Escape') {
+      if (isEscapeKey(evt)) {
         evt.preventDefault();
         replaceEditFormToPoint();
         document.removeEventListener('keydown', onDocumentKeydown);
@@ -55,8 +63,8 @@ export default class BoardPresenter {
 
     const pointComponent = new PointView({
       point,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      checkedOffers,
+      destination,
       onEditClick: () => {
         replacePointToEditForm();
         document.addEventListener('keydown', onDocumentKeydown);
@@ -65,8 +73,9 @@ export default class BoardPresenter {
 
     const editPointComponent = new EditPointView({
       point,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers,
+      checkedOffers,
+      destination,
       onFormClick: () => {
         replaceEditFormToPoint();
         document.removeEventListener('keydown', onDocumentKeydown);
