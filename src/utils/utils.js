@@ -30,7 +30,6 @@ const getDateTimeDifference = (dateFrom, dateTo) => {
 };
 
 export {
-  //getRandomArrayElement,
   getRandomInteger,
   capitalizeFirstLetter,
   formatDate,
