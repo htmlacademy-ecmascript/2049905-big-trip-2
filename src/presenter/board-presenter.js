@@ -41,12 +41,12 @@ export default class BoardPresenter {
       return;
     }
 
-    for (let i = 0; i < this.#points.length; i++) {
+    for (const point of this.#points) {
       this.#renderPoint({
-        point: this.#points[i],
-        offers: this.#offersModel.getOffersByType(this.#points[i].type),
-        checkedOffers: this.#offersModel.getOffersById(this.#points[i].type, this.#points[i].offers),
-        destination: this.#destinationsModel.getDestinationById(this.#points[i].destination)
+        point,
+        offers: this.#offersModel.getOffersByType(point.type),
+        checkedOffers: this.#offersModel.getOffersById(point.type, point.offers),
+        destination: this.#destinationsModel.getDestinationById(point.destination)
       });
     }
 

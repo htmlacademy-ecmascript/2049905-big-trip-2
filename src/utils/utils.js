@@ -8,8 +8,6 @@ dayjs.extend(utc);
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
-
 const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
@@ -32,7 +30,7 @@ const getDateTimeDifference = (dateFrom, dateTo) => {
 };
 
 export {
-  getRandomArrayElement,
+  //getRandomArrayElement,
   getRandomInteger,
   capitalizeFirstLetter,
   formatDate,

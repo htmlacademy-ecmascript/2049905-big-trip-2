@@ -1,6 +1,12 @@
-import { getRandomInteger, getRandomArrayElement } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/utils.js';
 import { mockDestinations } from '../mock/destinations.js';
 import { mockOffers } from '../mock/offers';
+
+const MIN_POINTS = 3;
+const MAX_POINTS = 5;
+
+const getRandomMockPoints = (items) => items.sort(() =>
+  Math.random() - 0.5).slice(0, getRandomInteger(MIN_POINTS, MAX_POINTS));
 
 export const mockPoints = [
   {
@@ -40,8 +46,8 @@ export const mockPoints = [
   {
     id: '3',
     basePrice: getRandomInteger(100, 2000),
-    dateFrom: '2023-11-11T14:00:00.000Z',
-    dateTo: '2023-11-11T15:10:00.000Z',
+    dateFrom: '2025-11-12T14:00:00.000Z',
+    dateTo: '2025-11-20T15:10:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: true,
     ...(() => {
@@ -57,8 +63,8 @@ export const mockPoints = [
   {
     id: '4',
     basePrice: getRandomInteger(100, 2000),
-    dateFrom: '2025-11-10T08:45:00.000Z',
-    dateTo: '2025-11-10T09:00:00.000Z',
+    dateFrom: '2025-11-20T08:45:00.000Z',
+    dateTo: '2025-12-15T09:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
     ...(() => {
@@ -174,8 +180,5 @@ export const mockPoints = [
     })()
   }
 ];
-
-const getRandomMockPoints = (items) =>
-  Array.from({ length: getRandomInteger(0, 5) }, () => getRandomArrayElement(items));
 
 export { getRandomMockPoints };
