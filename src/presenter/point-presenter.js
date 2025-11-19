@@ -97,4 +97,9 @@ export default class PointPresenter {
       this.#replaceEditFormToPoint();
     }
   }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
+  }
 }

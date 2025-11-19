@@ -2,11 +2,10 @@ import { getRandomInteger } from '../utils/utils.js';
 import { mockDestinations } from '../mock/destinations.js';
 import { mockOffers } from '../mock/offers';
 
-const MIN_POINTS = 3;
-const MAX_POINTS = 5;
+const COUNT_POINTS = 5;
 
 const getRandomMockPoints = (items) => items.sort(() =>
-  Math.random() - 0.5).slice(0, getRandomInteger(MIN_POINTS, MAX_POINTS));
+  Math.random() - 0.5).slice(0, COUNT_POINTS);
 
 const getRandomTypeAndOffers = () => {
   const typeGroup = mockOffers[getRandomInteger(0, mockOffers.length - 1)];
