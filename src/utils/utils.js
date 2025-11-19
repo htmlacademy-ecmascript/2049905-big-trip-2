@@ -29,12 +29,16 @@ const getDateTimeDifference = (dateFrom, dateTo) => {
   ].filter(Boolean).join(' ');
 };
 
+const updateItem = (items, update) =>
+  items.map((item) => item.id === update.id ? update : item);
+
 export {
   getRandomInteger,
   capitalizeFirstLetter,
   formatDate,
   getDateTimeDifference,
-  isEscapeKey
+  isEscapeKey,
+  updateItem
 };
 
 
