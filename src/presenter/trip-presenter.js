@@ -14,7 +14,7 @@ export default class TripPresenter {
   #destinationsModel = null;
   #points = null;
   #sortingComponent = null;
-  #sourcePoints = [];
+  #sourcePoints = null;
 
   #pointsListComponent = new PointsListView();
   #noPointsComponent = new NoPointsView();
@@ -34,8 +34,6 @@ export default class TripPresenter {
     this.#points = [...this.#pointModel.points].sort(sortPointsDay);
 
     this.#sourcePoints = [...this.#points];
-
-    this.#currentSortType = SortType.DAY;
 
     this.#renderFullTrip();
   }
@@ -106,6 +104,21 @@ export default class TripPresenter {
     this.#currentSortType = sortType;
   }
 
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortPoints(sortType);
+    this.#clearPointList();
+    this.#renderPoints();
+  };
+
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
     this.#sourcePoints = updateItem(this.#sourcePoints, updatedPoint);
@@ -122,22 +135,6 @@ export default class TripPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
-  };
-
-  #clearPointList() {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
-  }
-
-  #handleSortTypeChange = (sortType) => {
-    if (this.#currentSortType === sortType) {
-      return;
-    }
-
-    this.#sortPoints(sortType);
-
-    this.#clearPointList();
-    this.#renderPoints();
   };
 }
 

@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
-dayjs.extend(duration);
 
 const nowDate = dayjs();
 
@@ -29,7 +27,7 @@ const sortPointsPrice = (pointA, pointB) =>
   pointB.basePrice - pointA.basePrice;
 
 const sortPointsDay = (pointA, pointB) =>
-  dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom), 'minute');
+  dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom), 'hours');
 
 export {
   isPresentPoints,

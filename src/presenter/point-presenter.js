@@ -29,12 +29,7 @@ export default class PointPresenter {
       point,
       checkedOffers,
       destination,
-      onEditClick: () => {
-        if(!this.#isEditing) {
-          this.#handleModeChange();
-          this.#replacePointToEditForm();
-        }
-      },
+      onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });
 
@@ -85,6 +80,13 @@ export default class PointPresenter {
       evt.preventDefault();
       this.#replaceEditFormToPoint();
       document.removeEventListener('keydown', this.#onDocumentKeydown);
+    }
+  };
+
+  #handleEditClick = () => {
+    if(!this.#isEditing) {
+      this.#handleModeChange();
+      this.#replacePointToEditForm();
     }
   };
 

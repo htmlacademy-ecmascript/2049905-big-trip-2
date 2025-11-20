@@ -101,7 +101,7 @@ export const mockPoints = [
     dateFrom: '2025-05-01T09:00:00.000Z',
     dateTo: '2025-05-03T18:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
-    isFavorite: false,
+    isFavorite: true,
     ...getRandomTypeAndOffers()
   },
   {
