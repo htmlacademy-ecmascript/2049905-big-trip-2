@@ -25,6 +25,12 @@ const FilterType = {
   PAST: 'past'
 };
 
+const SortType = {
+  DAY: 'sort-day',
+  TIME: 'sort-time',
+  PRICE: 'sort-price'
+};
+
 const MessageNoPoints = {
   EVERYTHING: 'Click New Event to create your first point',
   FUTURE: 'There are no future events now',
@@ -32,4 +38,10 @@ const MessageNoPoints = {
   PAST: 'There are no past events now'
 };
 
-export { POINT_TYPES, DateFormat, FilterType, MessageNoPoints };
+export {
+  POINT_TYPES,
+  DateFormat,
+  FilterType,
+  MessageNoPoints,
+  SortType
+};

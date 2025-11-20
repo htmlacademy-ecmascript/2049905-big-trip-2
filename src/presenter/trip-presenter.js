@@ -1,5 +1,7 @@
 import { render } from '../framework/render.js';
 import { updateItem } from '../utils/utils.js';
+import { sortPointsTime, sortPointsPrice, sortPointsDay } from '../utils/point.js';
+import { SortType } from '../const.js';
 import SortingView from '../view/sorting-view.js';
 import PointsListView from '../view/points-list-view.js';
 import NoPointsView from '../view/no-points-view.js';
@@ -11,12 +13,15 @@ export default class TripPresenter {
   #offersModel = null;
   #destinationsModel = null;
   #points = null;
+  #sortingComponent = null;
+  #sourcePoints = null;
 
-  #sortingComponent = new SortingView();
   #pointsListComponent = new PointsListView();
   #noPointsComponent = new NoPointsView();
 
   #pointPresenters = new Map();
+
+  #currentSortType = SortType.DAY;
 
   constructor({ tripEventsContainer, pointModel, offersModel, destinationsModel }) {
     this.#tripEventsContainer = tripEventsContainer;
@@ -26,7 +31,9 @@ export default class TripPresenter {
   }
 
   init() {
-    this.#points = this.#pointModel.points;
+    this.#points = [...this.#pointModel.points].sort(sortPointsDay);
+
+    this.#sourcePoints = [...this.#points];
 
     this.#renderFullTrip();
   }
@@ -44,6 +51,10 @@ export default class TripPresenter {
   }
 
   #renderSorting() {
+    this.#sortingComponent = new SortingView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
     render(this.#sortingComponent, this.#tripEventsContainer);
   }
 
@@ -78,8 +89,39 @@ export default class TripPresenter {
     }
   }
 
+  #sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this.#points.sort(sortPointsTime);
+        break;
+      case SortType.PRICE:
+        this.#points.sort(sortPointsPrice);
+        break;
+      default:
+        this.#points = [...this.#sourcePoints];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortPoints(sortType);
+    this.#clearPointList();
+    this.#renderPoints();
+  };
+
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
+    this.#sourcePoints = updateItem(this.#sourcePoints, updatedPoint);
 
     const pointPresenter = this.#pointPresenters.get(updatedPoint.id);
 

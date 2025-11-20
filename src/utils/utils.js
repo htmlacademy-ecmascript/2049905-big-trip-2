@@ -1,9 +1,7 @@
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 import { DateFormat } from '../const.js';
 
-dayjs.extend(duration);
 dayjs.extend(utc);
 
 const isEscapeKey = (evt) => evt.key === 'Escape';

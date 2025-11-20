@@ -29,12 +29,7 @@ export default class PointPresenter {
       point,
       checkedOffers,
       destination,
-      onEditClick: () => {
-        if(!this.#isEditing) {
-          this.#handleModeChange();
-          this.#replacePointToEditForm();
-        }
-      },
+      onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });
 
@@ -88,6 +83,13 @@ export default class PointPresenter {
     }
   };
 
+  #handleEditClick = () => {
+    if(!this.#isEditing) {
+      this.#handleModeChange();
+      this.#replacePointToEditForm();
+    }
+  };
+
   #handleFavoriteClick = () => {
     this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
@@ -96,5 +98,10 @@ export default class PointPresenter {
     if (this.#isEditing) {
       this.#replaceEditFormToPoint();
     }
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
   }
 }
