@@ -1,7 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, getDateTimeDifference } from '../utils/utils.js';
+import { getPointViewData } from '../utils/point.js';
 
-const createPointTemplate = (point, checkedOffers, destination) => {
+const createPointTemplate = ({ point, checkedOffers, destination }) => {
 
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
@@ -61,35 +62,50 @@ const createPointTemplate = (point, checkedOffers, destination) => {
 export default class PointView extends AbstractView {
   #point = null;
   #offers = null;
-  #destination = null;
-  #handleEditClick = null;
-  #handleFavoriteClick = null;
+  #destinations = null;
+  #callbacks = {};
 
-  constructor({ point, checkedOffers, destination, onEditClick, onFavoriteClick }) {
+  constructor({ point, offers, destinations, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#offers = checkedOffers;
-    this.#destination = destination;
-    this.#handleEditClick = onEditClick;
-    this.#handleFavoriteClick = onFavoriteClick;
+    this.#offers = offers;
+    this.#destinations = destinations;
 
+    this.#callbacks.editClick = onEditClick;
+    this.#callbacks.favoriteClick = onFavoriteClick;
+
+    this.#setHandlers();
+  }
+
+  get template() {
+    const { checkedOffers, destination } = getPointViewData(
+      this.#point,
+      this.#offers,
+      this.#destinations
+    );
+
+    return createPointTemplate({
+      point: this.#point,
+      checkedOffers,
+      destination,
+    });
+  }
+
+  #setHandlers() {
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#editClickHandler);
+
     this.element.querySelector('.event__favorite-btn')
       .addEventListener('click', this.#favoriteClickHandler);
   }
 
-  get template() {
-    return createPointTemplate(this.#point, this.#offers, this.#destination);
-  }
-
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#callbacks.editClick?.();
   };
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFavoriteClick();
+    this.#callbacks.favoriteClick?.();
   };
 }

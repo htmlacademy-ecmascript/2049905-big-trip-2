@@ -75,9 +75,8 @@ export default class TripPresenter {
 
     pointPresenter.init({
       point,
-      offers: this.#offersModel.getOffersByType(point.type),
-      checkedOffers: this.#offersModel.getOffersById(point.type, point.offers),
-      destination: this.#destinationsModel.getDestinationById(point.destination)
+      offers: this.#offersModel.offers,
+      destinations: this.#destinationsModel.destinations
     });
 
     this.#pointPresenters.set(point.id, pointPresenter);
@@ -127,9 +126,8 @@ export default class TripPresenter {
 
     pointPresenter.init({
       point: updatedPoint,
-      offers: this.#offersModel.getOffersByType(updatedPoint.type),
-      checkedOffers: this.#offersModel.getOffersById(updatedPoint.type, updatedPoint.offers),
-      destination: this.#destinationsModel.getDestinationById(updatedPoint.destination)
+      offers: this.#offersModel.offers,
+      destinations: this.#destinationsModel.destinations
     });
   };
 

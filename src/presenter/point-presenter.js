@@ -19,7 +19,7 @@ export default class PointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  init({ point, checkedOffers, offers, destination }) {
+  init({ point, offers, destinations }) {
     this.#point = point;
 
     const prevPointComponent = this.#pointComponent;
@@ -27,8 +27,8 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point,
-      checkedOffers,
-      destination,
+      offers,
+      destinations,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });
@@ -36,8 +36,7 @@ export default class PointPresenter {
     this.#editPointComponent = new EditPointView({
       point,
       offers,
-      checkedOffers,
-      destination,
+      destinations,
       onFormClick: () => {
         this.#replaceEditFormToPoint();
       },
@@ -45,6 +44,8 @@ export default class PointPresenter {
         this.#replaceEditFormToPoint();
       }
     });
+
+    this.#editPointComponent._restoreHandlers();
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
       render(this.#pointComponent, this.#pointsListContainer);
@@ -70,6 +71,7 @@ export default class PointPresenter {
   }
 
   #replaceEditFormToPoint() {
+    this.#editPointComponent.reset(this.#point);
     replace(this.#pointComponent, this.#editPointComponent);
     this.#isEditing = false;
     document.removeEventListener('keydown', this.#onDocumentKeydown);

@@ -29,11 +29,24 @@ const sortPointsPrice = (pointA, pointB) =>
 const sortPointsDay = (pointA, pointB) =>
   dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom), 'hours');
 
+const getPointViewData = (point, offers, destinations) => {
+  const offersByType = offers.find((item) => item.type === point.type)?.offers ?? [];
+
+  const destination = destinations.find((dest) => dest.id === point.destination) ?? null;
+
+  const selectedOfferIds = point.offers ?? [];
+
+  const checkedOffers = offersByType.filter((offer) => selectedOfferIds.includes(offer.id));
+
+  return { offersByType, checkedOffers, destination };
+};
+
 export {
   isPresentPoints,
   isFuturePoints,
   isPastPoints,
   sortPointsTime,
   sortPointsPrice,
-  sortPointsDay
+  sortPointsDay,
+  getPointViewData
 };
