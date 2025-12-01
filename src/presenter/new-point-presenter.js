@@ -7,13 +7,13 @@ import { UserAction, UpdateType, getDefaultPoint } from '../const.js';
 export default class NewPointPresenter {
   #pointsListContainer = null;
   #editPointComponent = null;
-  #onPointChange = null;
-  #onNewPointDestroy = null;
+  #handlePointChange = null;
+  #handleNewPointDestroy = null;
 
-  constructor({pointListContainer, onPointChange, onNewPointDestroy}) {
-    this.#pointsListContainer = pointListContainer;
-    this.#onPointChange = onPointChange;
-    this.#onNewPointDestroy = onNewPointDestroy;
+  constructor({ pointsListContainer, onPointChange, onNewPointDestroy }) {
+    this.#pointsListContainer = pointsListContainer;
+    this.#handlePointChange = onPointChange;
+    this.#handleNewPointDestroy = onNewPointDestroy;
   }
 
   init(offers, destinations) {
@@ -39,10 +39,10 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#onNewPointDestroy();
-    this.#editPointComponent = null;
+    this.#handleNewPointDestroy();
 
     remove(this.#editPointComponent);
+    this.#editPointComponent = null;
 
     document.removeEventListener('keydown', this.#handleDocumentKeydown);
   }
@@ -55,7 +55,7 @@ export default class NewPointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    this.#onPointChange(
+    this.#handlePointChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       {

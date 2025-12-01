@@ -27,6 +27,8 @@ export default class TripPresenter {
 
   #pointPresenters = new Map();
 
+  #handleNewPointDestroy = null;
+
   constructor({ tripEventsContainer, pointsModel, offersModel, destinationsModel, filterModel, onNewPointDestroy }) {
     this.#tripEventsContainer = tripEventsContainer;
     this.#pointsModel = pointsModel;
@@ -34,10 +36,12 @@ export default class TripPresenter {
     this.#destinationsModel = destinationsModel;
     this.#filterModel = filterModel;
 
+    this.#handleNewPointDestroy = onNewPointDestroy;
+
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointChange: this.#handleViewAction,
-      onNewPointDestroy
+      onNewPointDestroy: this.#handleNewPointDestroy
     });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -61,7 +65,7 @@ export default class TripPresenter {
     this.#renderFullTrip();
   }
 
-  createPoint() {
+  createNewPoint() {
     this.#currentSortType = SortType.DEFAULT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(this.#offersModel.offers, this.#destinationsModel.destinations);

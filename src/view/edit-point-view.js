@@ -163,7 +163,10 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
 export default class EditPointView extends AbstractStatefulView {
   #offers = null;
   #destinations = null;
-  #callbacks = {};
+
+  #handleCloseClick = null;
+  #handleFormSubmit = null;
+  #handleDeleteClick = null;
 
   #startDatepicker = null;
   #endDatepicker = null;
@@ -174,10 +177,9 @@ export default class EditPointView extends AbstractStatefulView {
     this.#offers = offers;
     this.#destinations = destinations;
 
-
-    this.#callbacks.closeClick = onCloseClick;
-    this.#callbacks.formSubmit = onFormSubmit;
-    this.#callbacks.deleteClick = onDeleteClick;
+    this.#handleCloseClick = onCloseClick;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
 
     this._setState(EditPointView.parsePointToState(point));
 
@@ -243,7 +245,7 @@ export default class EditPointView extends AbstractStatefulView {
     const rollupBtn = this.element.querySelector('.event__rollup-btn');
 
     if(rollupBtn) {
-      rollupBtn.addEventListener('click', this.#handleCloseClick);
+      rollupBtn.addEventListener('click', this.#handleRollupBtnClick);
     }
 
     this.element
@@ -252,7 +254,7 @@ export default class EditPointView extends AbstractStatefulView {
 
     this.element
       .querySelector('.event__reset-btn')
-      .addEventListener('click', this.#handleDeleteClick);
+      .addEventListener('click', this.#handleDeleteBtnClick);
   }
 
   #setDatepickers () {
@@ -372,9 +374,9 @@ export default class EditPointView extends AbstractStatefulView {
     this.#startDatepicker.set('maxDate', newEndDate);
   };
 
-  #handleCloseClick = (evt) => {
+  #handleRollupBtnClick = (evt) => {
     evt.preventDefault();
-    this.#callbacks.closeClick?.();
+    this.#handleCloseClick?.();
   };
 
   #handleSaveClick = (evt) => {
@@ -385,13 +387,13 @@ export default class EditPointView extends AbstractStatefulView {
     const validDestinationNames = this.#destinations.map((dest) => dest.name);
 
     if (validDestinationNames.includes(inputValue)) {
-      this.#callbacks.formSubmit?.(EditPointView.parseStateToPoint(this._state));
+      this.#handleFormSubmit?.(EditPointView.parseStateToPoint(this._state));
     }
   };
 
-  #handleDeleteClick = (evt) => {
+  #handleDeleteBtnClick = (evt) => {
     evt.preventDefault();
-    this.#callbacks.deleteClick?.(EditPointView.parseStateToPoint(this._state));
+    this.#handleDeleteClick?.(EditPointView.parseStateToPoint(this._state));
   };
 
   static parsePointToState = (point) => ({

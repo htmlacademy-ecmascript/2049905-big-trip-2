@@ -14,7 +14,7 @@ const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 const filterModel = new FilterModel();
 
-newEventBtn.addEventListener('click', onNewEventButtonClick);
+newEventBtn.addEventListener('click', handleNewEventBtnClick);
 
 const handleNewPointFormClose = () => {
   newEventBtn.disabled = false;
@@ -29,8 +29,8 @@ const tripPresenter = new TripPresenter({
   onNewPointDestroy: handleNewPointFormClose
 });
 
-function onNewEventButtonClick() {
-  tripPresenter.createPoint();
+function handleNewEventBtnClick() {
+  tripPresenter.createNewPoint();
   newEventBtn.disabled = true;
 }
 
