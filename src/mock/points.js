@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { mockDestinations } from '../mock/destinations.js';
 import { mockOffers } from '../mock/offers';
 
@@ -35,8 +35,8 @@ export const mockPoints = [
   {
     id: '2',
     basePrice: getRandomInteger(100, 2000),
-    dateFrom: '2025-01-02T22:00:00.000Z',
-    dateTo: '2025-01-04T10:30:00.000Z',
+    dateFrom: '2026-01-02T22:00:00.000Z',
+    dateTo: '2026-01-04T10:30:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
     ...getRandomTypeAndOffers()
@@ -89,8 +89,8 @@ export const mockPoints = [
   {
     id: '8',
     basePrice: getRandomInteger(100, 2000),
-    dateFrom: '2025-11-13T13:45:00.000Z',
-    dateTo: '2025-11-13T14:00:00.000Z',
+    dateFrom: '2025-11-30T13:45:00.000Z',
+    dateTo: '2025-12-16T14:00:00.000Z',
     destination: mockDestinations[getRandomInteger(0, mockDestinations.length - 1)].id,
     isFavorite: false,
     ...getRandomTypeAndOffers()

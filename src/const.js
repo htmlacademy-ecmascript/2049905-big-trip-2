@@ -18,6 +18,12 @@ const DateFormat = {
   CALENDAR_DATE: 'DD/MM/YY',
 };
 
+const SortType = {
+  DAY: 'sort-day',
+  TIME: 'sort-time',
+  PRICE: 'sort-price'
+};
+
 const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -25,23 +31,43 @@ const FilterType = {
   PAST: 'past'
 };
 
-const SortType = {
-  DAY: 'sort-day',
-  TIME: 'sort-time',
-  PRICE: 'sort-price'
+const NoPointsTextByType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
 };
 
-const MessageNoPoints = {
-  EVERYTHING: 'Click New Event to create your first point',
-  FUTURE: 'There are no future events now',
-  PRESENT: 'There are no present events now',
-  PAST: 'There are no past events now'
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
 };
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const getDefaultPoint = () => ({
+  id: null,
+  basePrice: 0,
+  dateFrom: new Date().toISOString(),
+  dateTo: new Date().toISOString(),
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: POINT_TYPES[1]
+});
 
 export {
   POINT_TYPES,
   DateFormat,
   FilterType,
-  MessageNoPoints,
-  SortType
+  NoPointsTextByType,
+  SortType,
+  UpdateType,
+  UserAction,
+  getDefaultPoint
 };
