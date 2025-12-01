@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatDate, getDateTimeDifference } from '../utils/utils.js';
-import { getPointViewData } from '../utils/point.js';
+import { formatDate } from '../utils/common.js';
+import { getPointViewData, getDateTimeDifference } from '../utils/point.js';
 
 const createPointTemplate = ({ point, checkedOffers, destination }) => {
 
@@ -93,18 +93,18 @@ export default class PointView extends AbstractView {
 
   #setHandlers() {
     this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#editClickHandler);
+      .addEventListener('click', this.#handleEditClick);
 
     this.element.querySelector('.event__favorite-btn')
-      .addEventListener('click', this.#favoriteClickHandler);
+      .addEventListener('click', this.#handleFavoriteClick);
   }
 
-  #editClickHandler = (evt) => {
+  #handleEditClick = (evt) => {
     evt.preventDefault();
     this.#callbacks.editClick?.();
   };
 
-  #favoriteClickHandler = (evt) => {
+  #handleFavoriteClick = (evt) => {
     evt.preventDefault();
     this.#callbacks.favoriteClick?.();
   };
