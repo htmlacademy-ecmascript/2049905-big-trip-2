@@ -1,11 +1,13 @@
-import { render, remove } from '../framework/render.js';
+import { render, remove, replace } from '../framework/render.js';
 import { sortPointsTime, sortPointsPrice, sortPointsDay } from '../utils/point.js';
 import { SortType, FilterType, UpdateType, UserAction } from '../const.js';
+import { filter } from '../utils/filter.js';
 import SortingView from '../view/sorting-view.js';
 import PointsListView from '../view/points-list-view.js';
 import NoPointsView from '../view/no-points-view.js';
+import LoadingView from '../view/loading-view.js';
+import LoadingFailView from '../view/loading-fail-view.js';
 import PointPresenter from './point-presenter.js';
-import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
 
 export default class TripPresenter {
@@ -18,34 +20,38 @@ export default class TripPresenter {
 
   #sortingComponent = null;
   #pointsListComponent = new PointsListView();
+  #loadingComponent = new LoadingView();
+  #loadingFailComponent = new LoadingFailView();
   #noPointsComponent = null;
 
   #newPointPresenter = null;
+  #pointPresenters = new Map();
 
   #currentSortType = null;
   #filterType = null;
 
-  #pointPresenters = new Map();
+  #newEventBtn = null;
 
-  #handleNewPointDestroy = null;
+  #isLoading = true;
 
-  constructor({ tripEventsContainer, pointsModel, offersModel, destinationsModel, filterModel, onNewPointDestroy }) {
+  constructor({ tripEventsContainer, pointsModel, offersModel, destinationsModel, filterModel, newEventBtn }) {
     this.#tripEventsContainer = tripEventsContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#filterModel = filterModel;
-
-    this.#handleNewPointDestroy = onNewPointDestroy;
+    this.#newEventBtn = newEventBtn;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointChange: this.#handleViewAction,
-      onNewPointDestroy: this.#handleNewPointDestroy
+      onNewPointFormClose: this.#handleNewPointFormClose
     });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+
+    this.#newEventBtn.addEventListener('click', this.#handleNewEventBtnClick);
   }
 
   get points() {
@@ -62,6 +68,13 @@ export default class TripPresenter {
   }
 
   init() {
+    this.#newEventBtn.disabled = true;
+
+    this.#pointsModel.init()
+      .finally(() => {
+        this.#newEventBtn.disabled = false;
+      });
+
     this.#renderFullTrip();
   }
 
@@ -72,6 +85,11 @@ export default class TripPresenter {
   }
 
   #renderFullTrip() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     const points = this.points;
 
     if (!points.length) {
@@ -82,6 +100,10 @@ export default class TripPresenter {
     this.#renderSorting();
     this.#renderPointsList();
     this.#renderPoints(points);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#tripEventsContainer);
   }
 
   #renderSorting() {
@@ -128,6 +150,8 @@ export default class TripPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
+    remove(this.#loadingComponent);
+
     if (this.#noPointsComponent !== null) {
       remove(this.#noPointsComponent);
       this.#noPointsComponent = null;
@@ -148,6 +172,15 @@ export default class TripPresenter {
       case UpdateType.MAJOR:
         this.#clearTripBoard();
         this.#renderFullTrip();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderFullTrip();
+        break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        replace(this.#loadingFailComponent, this.#loadingComponent);
         break;
     }
   };
@@ -179,6 +212,15 @@ export default class TripPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
+  #handleNewEventBtnClick = () => {
+    this.createNewPoint();
+    this.#newEventBtn.disabled = true;
+  };
+
+  #handleNewPointFormClose = () => {
+    this.#newEventBtn.disabled = false;
   };
 }
 

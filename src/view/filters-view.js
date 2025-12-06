@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createFilterItemTemplate(filter, currentFilterType) {
+const createFilterItemTemplate = (filter, currentFilterType) => {
   const { type, count } = filter;
   return (
     `
@@ -15,9 +15,9 @@ function createFilterItemTemplate(filter, currentFilterType) {
       </div>
     `
   );
-}
+};
 
-function createFiltersTemplate (filterItems, currentFilterType) {
+const createFiltersTemplate = (filterItems, currentFilterType) => {
   const filterItemsTemplate = filterItems
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
     .join('');
@@ -28,7 +28,7 @@ function createFiltersTemplate (filterItems, currentFilterType) {
         <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`
   );
-}
+};
 
 export default class FiltersView extends AbstractView {
   #filters = null;
