@@ -1,24 +1,28 @@
 import TripPresenter from './presenter/trip-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import PointModel from './model/points-model.js';
+import PointsModel from './model/points-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import FilterModel from './model/filter-model.js';
+import PointsApiService from './points-api-service.js';
+
+const AUTHORIZATION = 'Basic zf7H3yVbQ2mD0v9s8';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
 
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
 const newEventBtn = document.querySelector('.trip-main__event-add-btn');
 
-const pointsModel = new PointModel();
-const offersModel = new OffersModel();
-const destinationsModel = new DestinationsModel();
+const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
+
+const offersModel = new OffersModel({ pointsApiService });
+const destinationsModel = new DestinationsModel({ pointsApiService });
+const pointsModel = new PointsModel({
+  pointsApiService,
+  offersModel,
+  destinationsModel
+});
 const filterModel = new FilterModel();
-
-newEventBtn.addEventListener('click', handleNewEventBtnClick);
-
-const handleNewPointFormClose = () => {
-  newEventBtn.disabled = false;
-};
 
 const tripPresenter = new TripPresenter({
   tripEventsContainer,
@@ -26,13 +30,8 @@ const tripPresenter = new TripPresenter({
   offersModel,
   destinationsModel,
   filterModel,
-  onNewPointDestroy: handleNewPointFormClose
+  newEventBtn
 });
-
-function handleNewEventBtnClick() {
-  tripPresenter.createNewPoint();
-  newEventBtn.disabled = true;
-}
 
 const filterPresenter = new FilterPresenter({
   filtersContainer,

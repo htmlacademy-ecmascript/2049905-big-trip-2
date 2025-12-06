@@ -1,19 +1,18 @@
 import EditPointView from '../view/edit-point-view.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { getRandomInteger, isEscapeKey } from '../utils/common.js';
+import { isEscapeKey } from '../utils/common.js';
 import { UserAction, UpdateType, getDefaultPoint } from '../const.js';
-
 
 export default class NewPointPresenter {
   #pointsListContainer = null;
   #editPointComponent = null;
   #handlePointChange = null;
-  #handleNewPointDestroy = null;
+  #handleNewPointFormClose = null;
 
-  constructor({ pointsListContainer, onPointChange, onNewPointDestroy }) {
+  constructor({ pointsListContainer, onPointChange, onNewPointFormClose }) {
     this.#pointsListContainer = pointsListContainer;
     this.#handlePointChange = onPointChange;
-    this.#handleNewPointDestroy = onNewPointDestroy;
+    this.#handleNewPointFormClose = onNewPointFormClose;
   }
 
   init(offers, destinations) {
@@ -39,7 +38,7 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#handleNewPointDestroy();
+    this.#handleNewPointFormClose();
 
     remove(this.#editPointComponent);
     this.#editPointComponent = null;
@@ -60,7 +59,7 @@ export default class NewPointPresenter {
       UpdateType.MINOR,
       {
         ...point,
-        id: getRandomInteger(15, 100)},
+        id: crypto.randomUUID()},
     );
 
     this.destroy();

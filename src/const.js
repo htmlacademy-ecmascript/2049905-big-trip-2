@@ -48,6 +48,13 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+  ERROR: 'ERROR'
+};
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
 };
 
 const getDefaultPoint = () => ({
@@ -69,5 +76,6 @@ export {
   SortType,
   UpdateType,
   UserAction,
+  Method,
   getDefaultPoint
 };
