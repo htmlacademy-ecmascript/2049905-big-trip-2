@@ -1,8 +1,9 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalizeFirstLetter, formatDate } from '../utils/common.js';
 import { getPointViewData } from '../utils/point.js';
 import { POINT_TYPES } from '../const.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -116,7 +117,7 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 ${type}
               </label>
               <input class="event__input  event__input--destination" id="event-destination-${pointId}" type="text"
-                name="event-destination" value='${destination.name ? destination.name : ''}'
+                name="event-destination" value='${destination.name ? he.encode(destination.name) : ''}'
                 list="destination-list-${pointId}" required autocomplete="off">
               <datalist id="destination-list-${pointId}">
                  ${destinationList}
@@ -126,11 +127,11 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
               <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text"
-                name="event-start-time" value="${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}">
+                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}` : ''}">
               &mdash;
               <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
               <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text"
-                name="event-end-time" value="${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}">
+                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}` : ''}">
             </div>
 
             <div class="event__field-group  event__field-group--price">
@@ -279,12 +280,12 @@ export default class EditPointView extends AbstractStatefulView {
       'time_24hr': true,
       enableTime: true,
       dateFormat: 'd/m/y H:i',
+      locale: { firstDayOfWeek: 1 }
     };
 
     this.#startDatepicker = flatpickr(startTimeInput, {
       ...DatepickerCommonConfig,
       defaultDate: this._state.dateFrom,
-      maxDate: this._state.dateTo,
       onChange: this.#handleStartDateChange,
     });
 
@@ -376,8 +377,6 @@ export default class EditPointView extends AbstractStatefulView {
       ...this._state,
       dateTo: newEndDate
     });
-
-    this.#startDatepicker.set('maxDate', newEndDate);
   };
 
   #handleRollupBtnClick = (evt) => {

@@ -28,7 +28,7 @@ export default class TripPresenter {
   #newPointPresenter = null;
   #pointPresenters = new Map();
 
-  #currentSortType = null;
+  #currentSortType = SortType.DAY;
   #filterType = null;
 
   #newEventBtn = null;

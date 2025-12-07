@@ -69,12 +69,12 @@ const Method = {
 
 const getDefaultPoint = () => ({
   basePrice: 0,
-  dateFrom: '',
-  dateTo: '',
+  dateFrom: null,
+  dateTo: null,
   destination: null,
   isFavorite: false,
   offers: [],
-  type: POINT_TYPES[0]
+  type: POINT_TYPES[5]
 });
 
 export {
