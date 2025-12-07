@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render.js';
 import { isEscapeKey } from '../utils/common.js';
-import { UserAction, UpdateType} from '../const.js';
+import { UserAction, UpdateType } from '../const.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 
@@ -102,8 +102,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       update
     );
-
-    this.#replaceEditFormToPoint();
   };
 
   #handleCloseClick = () => {
@@ -117,6 +115,48 @@ export default class PointPresenter {
       point
     );
   };
+
+  setSaving() {
+    if (!this.#isEditing) {
+      // Пока disable() нет — просто пропустим
+      // this.#pointComponent.disable();
+      return;
+    }
+
+    this.#editPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+      isDeleting: false,
+    });
+  }
+
+  setDeleting() {
+    if (this.#isEditing) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: false,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setResetting() {
+    if (!this.#isEditing) {
+      this.#pointComponent.shake();
+      // this.#pointComponent.enable();  // пока не реализовано
+      return;
+    }
+
+    const reset = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(reset);
+  }
 
   resetView() {
     if (this.#isEditing) {

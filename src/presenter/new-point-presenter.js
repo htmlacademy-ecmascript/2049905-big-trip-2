@@ -46,6 +46,26 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#handleDocumentKeydown);
   }
 
+  setSaving() {
+    this.#editPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+      isDeleting: false,
+    });
+  }
+
+  setResetting() {
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  }
+
   #handleDocumentKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
@@ -57,12 +77,8 @@ export default class NewPointPresenter {
     this.#handlePointChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {
-        ...point,
-        id: crypto.randomUUID()},
+      point
     );
-
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
