@@ -101,14 +101,14 @@ export default class TripPresenter {
     }
 
     const points = this.points;
-    const filteredPoints = filter[this.#filterType](points);
+
+    this.#renderTripInfo(points);
 
     if (!points.length) {
       this.#renderNoPointsList();
       return;
     }
 
-    this.#renderTripInfo(filteredPoints);
     this.#renderSorting();
     this.#renderPointsList();
     this.#renderPoints(points);
