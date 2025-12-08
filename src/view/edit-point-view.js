@@ -216,9 +216,11 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(
+    this._setState(
       EditPointView.parsePointToState(point)
     );
+
+    this.updateElement(this._state);
   }
 
   removeElement() {
@@ -336,9 +338,14 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
 
     const value = evt.target.value;
+
+    if (value === '') {
+      return;
+    }
+
     const newPrice = Number(value);
 
-    if (Number.isNaN(newPrice) || newPrice < 0) {
+    if (Number.isNaN(newPrice) || newPrice <= 0) {
       return;
     }
 

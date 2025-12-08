@@ -60,60 +60,6 @@ export default class PointPresenter {
     remove(prevEditPointComponent);
   }
 
-  #replacePointToEditForm() {
-    replace(this.#editPointComponent, this.#pointComponent);
-    this.#isEditing = true;
-    document.addEventListener('keydown', this.#handleDocumentKeydown);
-  }
-
-  #replaceEditFormToPoint() {
-    replace(this.#pointComponent, this.#editPointComponent);
-    this.#isEditing = false;
-    document.removeEventListener('keydown', this.#handleDocumentKeydown);
-  }
-
-  #handleDocumentKeydown = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      this.#replaceEditFormToPoint();
-    }
-  };
-
-  #handleEditClick = () => {
-    if(!this.#isEditing) {
-      this.#handleModeChange();
-      this.#replacePointToEditForm();
-    }
-  };
-
-  #handleFavoriteClick = () => {
-    this.#handleDataChange(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      {...this.#point, isFavorite: !this.#point.isFavorite}
-    );
-  };
-
-  #handleFormSubmit = (update) => {
-    this.#handleDataChange(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      update
-    );
-  };
-
-  #handleCloseClick = () => {
-    this.resetView();
-  };
-
-  #handleDeleteClick = (point) => {
-    this.#handleDataChange(
-      UserAction.DELETE_POINT,
-      UpdateType.MINOR,
-      point
-    );
-  };
-
   setSaving() {
     if (this.#isEditing) {
       this.#editPointComponent.updateElement({
@@ -152,14 +98,70 @@ export default class PointPresenter {
   }
 
   resetView() {
-    if (this.#isEditing) {
-      this.#editPointComponent.reset(this.#point);
-      this.#replaceEditFormToPoint();
+    if (!this.#isEditing) {
+      return;
     }
+
+    this.#editPointComponent.reset(this.#point);
+    this.#replaceEditFormToPoint();
   }
 
   destroy() {
     remove(this.#pointComponent);
     remove(this.#editPointComponent);
   }
+
+  #replacePointToEditForm() {
+    replace(this.#editPointComponent, this.#pointComponent);
+    this.#isEditing = true;
+    document.addEventListener('keydown', this.#handleDocumentKeydown);
+  }
+
+  #replaceEditFormToPoint() {
+    replace(this.#pointComponent, this.#editPointComponent);
+    this.#isEditing = false;
+    document.removeEventListener('keydown', this.#handleDocumentKeydown);
+  }
+
+  #handleDocumentKeydown = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      this.resetView();
+    }
+  };
+
+  #handleEditClick = () => {
+    if(!this.#isEditing) {
+      this.#handleModeChange();
+      this.#replacePointToEditForm();
+    }
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
+  };
+
+  #handleFormSubmit = (update) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      update
+    );
+  };
+
+  #handleCloseClick = () => {
+    this.resetView();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point
+    );
+  };
 }

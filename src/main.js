@@ -7,6 +7,7 @@ import DestinationsModel from './model/destinations-model.js';
 import FilterModel from './model/filter-model.js';
 import PointsApiService from './points-api-service.js';
 
+const tripInfoContainer = document.querySelector('.trip-main');
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
 const newEventBtn = document.querySelector('.trip-main__event-add-btn');
@@ -23,6 +24,7 @@ const pointsModel = new PointsModel({
 const filterModel = new FilterModel();
 
 const tripPresenter = new TripPresenter({
+  tripInfoContainer,
   tripEventsContainer,
   pointsModel,
   offersModel,

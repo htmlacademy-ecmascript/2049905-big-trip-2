@@ -19,6 +19,7 @@ const DateFormat = {
   TIME: 'HH:mm',
   FULL_DATE_TIME: 'YYYY-MM-DDTHH:mm',
   CALENDAR_DATE: 'DD/MM/YY',
+  SHORT_DATE: 'DD MMM'
 };
 
 const SortType = {

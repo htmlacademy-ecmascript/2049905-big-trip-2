@@ -1,8 +1,9 @@
-import { render, remove, replace } from '../framework/render.js';
+import { RenderPosition, render, remove, replace } from '../framework/render.js';
 import { sortPointsTime, sortPointsPrice, sortPointsDay } from '../utils/point.js';
 import { SortType, FilterType, UpdateType, UserAction, TimeLimit } from '../const.js';
 import { filter } from '../utils/filter.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import TripInfoView from '../view/trip-info-view.js';
 import SortingView from '../view/sorting-view.js';
 import PointsListView from '../view/points-list-view.js';
 import NoPointsView from '../view/no-points-view.js';
@@ -12,6 +13,7 @@ import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 
 export default class TripPresenter {
+  #tripInfoContainer = null;
   #tripEventsContainer = null;
 
   #pointsModel = null;
@@ -19,6 +21,7 @@ export default class TripPresenter {
   #destinationsModel = null;
   #filterModel = null;
 
+  #tripInfoComponent = null;
   #sortingComponent = null;
   #pointsListComponent = new PointsListView();
   #loadingComponent = new LoadingView();
@@ -40,7 +43,8 @@ export default class TripPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({ tripEventsContainer, pointsModel, offersModel, destinationsModel, filterModel, newEventBtn }) {
+  constructor({ tripInfoContainer, tripEventsContainer, pointsModel, offersModel, destinationsModel, filterModel, newEventBtn }) {
+    this.#tripInfoContainer = tripInfoContainer;
     this.#tripEventsContainer = tripEventsContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
@@ -98,6 +102,8 @@ export default class TripPresenter {
 
     const points = this.points;
 
+    this.#renderTripInfo(points);
+
     if (!points.length) {
       this.#renderNoPointsList();
       return;
@@ -110,6 +116,25 @@ export default class TripPresenter {
 
   #renderLoading() {
     render(this.#loadingComponent, this.#tripEventsContainer);
+  }
+
+  #renderTripInfo(points) {
+    if (this.#tripInfoComponent) {
+      remove(this.#tripInfoComponent);
+      this.#tripInfoComponent = null;
+    }
+
+    if (!points.length) {
+      return;
+    }
+
+    this.#tripInfoComponent = new TripInfoView({
+      points,
+      destinations: this.#destinationsModel.destinations,
+      offers: this.#offersModel.offers
+    });
+
+    render(this.#tripInfoComponent, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderSorting() {
@@ -176,6 +201,7 @@ export default class TripPresenter {
         this.#renderFullTrip();
         break;
       case UpdateType.MAJOR:
+        this.#currentSortType = SortType.DAY;
         this.#clearTripBoard();
         this.#renderFullTrip();
         break;
