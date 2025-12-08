@@ -1,7 +1,7 @@
-import EditPointView from '../view/edit-point-view.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
 import { isEscapeKey } from '../utils/common.js';
 import { UserAction, UpdateType, getDefaultPoint } from '../const.js';
+import EditPointView from '../view/edit-point-view.js';
 
 export default class NewPointPresenter {
   #pointsListContainer = null;

@@ -207,6 +207,7 @@ export default class TripPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
+          this.#newPointPresenter.destroy();
         } catch (err) {
           this.#newPointPresenter.setResetting();
         }

@@ -43,8 +43,6 @@ export default class PointPresenter {
       onDeleteClick: this.#handleDeleteClick
     });
 
-    this.#editPointComponent._restoreHandlers();
-
     if (prevPointComponent === null || prevEditPointComponent === null) {
       render(this.#pointComponent, this.#pointsListContainer);
       return;
@@ -117,17 +115,13 @@ export default class PointPresenter {
   };
 
   setSaving() {
-    if (!this.#isEditing) {
-      // Пока disable() нет — просто пропустим
-      // this.#pointComponent.disable();
-      return;
+    if (this.#isEditing) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+        isDeleting: false,
+      });
     }
-
-    this.#editPointComponent.updateElement({
-      isDisabled: true,
-      isSaving: true,
-      isDeleting: false,
-    });
   }
 
   setDeleting() {
@@ -143,7 +137,6 @@ export default class PointPresenter {
   setResetting() {
     if (!this.#isEditing) {
       this.#pointComponent.shake();
-      // this.#pointComponent.enable();  // пока не реализовано
       return;
     }
 

@@ -1,7 +1,7 @@
+import { getDefaultPoint } from '../const.js';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import { getDefaultPoint } from '../const.js';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);

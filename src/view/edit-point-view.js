@@ -78,7 +78,7 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
     return `
         <div class="event__offer-selector">
           <input class="event__offer-checkbox visually-hidden" id="${eventOfferId}" type="checkbox"
-            name="event-offer-luggage" data-offer-id="${offer.id}" ${checked}>
+            name="event-offer-luggage" data-offer-id="${offer.id}" ${checked} ${isDisabled ? 'disabled' : ''}>
           <label class="event__offer-label" for="${eventOfferId}">
             <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
@@ -102,7 +102,9 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 <span class="visually-hidden">Choose event type</span>
                 <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
               </label>
-              <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox">
+              <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox"
+                ${isDisabled ? 'disabled' : ''}
+              >
 
               <div class="event__type-list">
                 <fieldset class="event__type-group">
@@ -118,7 +120,7 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
               </label>
               <input class="event__input  event__input--destination" id="event-destination-${pointId}" type="text"
                 name="event-destination" value='${destination.name ? he.encode(destination.name) : ''}'
-                list="destination-list-${pointId}" required autocomplete="off">
+                list="destination-list-${pointId}" required autocomplete="off" ${isDisabled ? 'disabled' : ''}>
               <datalist id="destination-list-${pointId}">
                  ${destinationList}
               </datalist>
@@ -127,11 +129,15 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
               <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text"
-                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}` : ''}">
+                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}` : ''}"
+                ${isDisabled ? 'disabled' : ''}
+              >
               &mdash;
               <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
               <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text"
-                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}` : ''}">
+                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}` : ''}"
+                ${isDisabled ? 'disabled' : ''}
+              >
             </div>
 
             <div class="event__field-group  event__field-group--price">
@@ -140,7 +146,7 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 &euro;
               </label>
               <input class="event__input  event__input--price" id="event-price-${pointId}" type="number"
-                name="event-price" value="${basePrice}">
+                name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
             </div>
 
             <button class="event__save-btn btn btn--blue" type="submit"
