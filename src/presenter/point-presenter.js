@@ -98,10 +98,12 @@ export default class PointPresenter {
   }
 
   resetView() {
-    if (this.#isEditing) {
-      this.#editPointComponent.reset(this.#point);
-      this.#replaceEditFormToPoint();
+    if (!this.#isEditing) {
+      return;
     }
+
+    this.#editPointComponent.reset(this.#point);
+    this.#replaceEditFormToPoint();
   }
 
   destroy() {
@@ -116,13 +118,6 @@ export default class PointPresenter {
   }
 
   #replaceEditFormToPoint() {
-    const editPointElement = this.#editPointComponent?.element;
-    const pointElement = this.#pointComponent?.element;
-
-    if (!editPointElement || !pointElement || !editPointElement.parentElement) {
-      return;
-    }
-
     replace(this.#pointComponent, this.#editPointComponent);
     this.#isEditing = false;
     document.removeEventListener('keydown', this.#handleDocumentKeydown);
@@ -132,7 +127,6 @@ export default class PointPresenter {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.resetView();
-      this.#replaceEditFormToPoint();
     }
   };
 
