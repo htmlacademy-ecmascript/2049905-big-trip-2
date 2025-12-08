@@ -1,5 +1,5 @@
-import AbstractView from '../framework/view/abstract-view.js';
 import { NoPointsTextByType } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createNoPointsTemplate = (filterType) =>
   `<p class="trip-events__msg">

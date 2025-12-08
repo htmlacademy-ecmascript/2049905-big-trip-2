@@ -1,5 +1,5 @@
-import Observable from '../framework/observable.js';
 import { UpdateType } from '../const.js';
+import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {
   #points = null;
@@ -58,16 +58,25 @@ export default class PointsModel extends Observable {
     }
   }
 
-  addPoint(updateType, update) {
-    this.#points.push(update);
-
-    this._notify(updateType, update);
+  async addPoint(updateType, update) {
+    try {
+      const response = await this.#pointsApiService.addPoint(update);
+      const newPoint = this.#adaptToClient(response);
+      this.#points.push(newPoint);
+      this._notify(updateType, newPoint);
+    } catch (error) {
+      throw new Error('Невозможно добавить новую точку!');
+    }
   }
 
-  deletePoint(updateType, update) {
-    this.#points = this.#points.filter((item) => item.id !== update.id);
-
-    this._notify(updateType);
+  async deletePoint(updateType, update) {
+    try {
+      await this.#pointsApiService.deletePoint(update);
+      this.#points = this.#points.filter((item) => item.id !== update.id);
+      this._notify(updateType);
+    } catch (error) {
+      throw new Error('Невозможно удалить точку!');
+    }
   }
 
   #adaptToClient(point) {

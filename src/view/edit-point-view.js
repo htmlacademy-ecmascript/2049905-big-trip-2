@@ -1,8 +1,9 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalizeFirstLetter, formatDate } from '../utils/common.js';
 import { getPointViewData } from '../utils/point.js';
 import { POINT_TYPES } from '../const.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -42,7 +43,7 @@ const createDestinationTemplate = (destination) => {
 };
 
 const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, destination }) => {
-  const { basePrice, dateFrom, dateTo, type } = point;
+  const { basePrice, dateFrom, dateTo, type, isDisabled, isSaving, isDeleting } = point;
 
   const pointId = point.id;
 
@@ -77,7 +78,7 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
     return `
         <div class="event__offer-selector">
           <input class="event__offer-checkbox visually-hidden" id="${eventOfferId}" type="checkbox"
-            name="event-offer-luggage" data-offer-id="${offer.id}" ${checked}>
+            name="event-offer-luggage" data-offer-id="${offer.id}" ${checked} ${isDisabled ? 'disabled' : ''}>
           <label class="event__offer-label" for="${eventOfferId}">
             <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
@@ -101,7 +102,9 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 <span class="visually-hidden">Choose event type</span>
                 <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
               </label>
-              <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox">
+              <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox"
+                ${isDisabled ? 'disabled' : ''}
+              >
 
               <div class="event__type-list">
                 <fieldset class="event__type-group">
@@ -116,8 +119,8 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 ${type}
               </label>
               <input class="event__input  event__input--destination" id="event-destination-${pointId}" type="text"
-                name="event-destination" value='${destination.name ? destination.name : ''}'
-                list="destination-list-${pointId}" required autocomplete="off">
+                name="event-destination" value='${destination.name ? he.encode(destination.name) : ''}'
+                list="destination-list-${pointId}" required autocomplete="off" ${isDisabled ? 'disabled' : ''}>
               <datalist id="destination-list-${pointId}">
                  ${destinationList}
               </datalist>
@@ -126,11 +129,15 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
               <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text"
-                name="event-start-time" value="${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}">
+                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}` : ''}"
+                ${isDisabled ? 'disabled' : ''}
+              >
               &mdash;
               <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
               <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text"
-                name="event-end-time" value="${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}">
+                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}` : ''}"
+                ${isDisabled ? 'disabled' : ''}
+              >
             </div>
 
             <div class="event__field-group  event__field-group--price">
@@ -139,11 +146,17 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
                 &euro;
               </label>
               <input class="event__input  event__input--price" id="event-price-${pointId}" type="number"
-                name="event-price" value="${basePrice}">
+                name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
             </div>
 
-            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-            <button class="event__reset-btn" type="reset">${destination.name ? 'Delete' : 'Cancel'}</button>
+            <button class="event__save-btn btn btn--blue" type="submit"
+              ${isDisabled ? 'disabled' : ''}>
+              ${isSaving ? 'Saving...' : 'Save'}
+            </button>
+            <button class="event__reset-btn" type="reset"
+              ${isDisabled ? 'disabled' : ''}>
+              ${ destination.name ? (`${isDeleting ? 'Deleting...' : 'Delete'}`) : 'Cancel' }
+            </button>
             ${destination.name ? (`
               <button class="event__rollup-btn" type="button">
                 <span class="visually-hidden">Open event</span>
@@ -273,12 +286,12 @@ export default class EditPointView extends AbstractStatefulView {
       'time_24hr': true,
       enableTime: true,
       dateFormat: 'd/m/y H:i',
+      locale: { firstDayOfWeek: 1 }
     };
 
     this.#startDatepicker = flatpickr(startTimeInput, {
       ...DatepickerCommonConfig,
       defaultDate: this._state.dateFrom,
-      maxDate: this._state.dateTo,
       onChange: this.#handleStartDateChange,
     });
 
@@ -370,8 +383,6 @@ export default class EditPointView extends AbstractStatefulView {
       ...this._state,
       dateTo: newEndDate
     });
-
-    this.#startDatepicker.set('maxDate', newEndDate);
   };
 
   #handleRollupBtnClick = (evt) => {
@@ -398,10 +409,19 @@ export default class EditPointView extends AbstractStatefulView {
 
   static parsePointToState = (point) => ({
     ...point,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false
   });
 
-  static parseStateToPoint = (state) => ({
-    ...state,
-  });
+  static parseStateToPoint = (state) => {
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
+  };
 }
 

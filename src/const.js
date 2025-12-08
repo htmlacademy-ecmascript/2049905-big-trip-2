@@ -1,3 +1,6 @@
+const AUTHORIZATION = 'Basic tG3h8YkVq1rN6p0b5';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+
 const POINT_TYPES = [
   'taxi',
   'bus',
@@ -38,6 +41,11 @@ const NoPointsTextByType = {
   [FilterType.PAST]: 'There are no past events now',
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 250,
+  UPPER_LIMIT: 1000,
+};
+
 const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
@@ -55,26 +63,30 @@ const UpdateType = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
 };
 
 const getDefaultPoint = () => ({
-  id: null,
   basePrice: 0,
-  dateFrom: new Date().toISOString(),
-  dateTo: new Date().toISOString(),
+  dateFrom: null,
+  dateTo: null,
   destination: null,
   isFavorite: false,
   offers: [],
-  type: POINT_TYPES[1]
+  type: POINT_TYPES[5]
 });
 
 export {
+  AUTHORIZATION,
+  END_POINT,
   POINT_TYPES,
   DateFormat,
   FilterType,
   NoPointsTextByType,
   SortType,
   UpdateType,
+  TimeLimit,
   UserAction,
   Method,
   getDefaultPoint

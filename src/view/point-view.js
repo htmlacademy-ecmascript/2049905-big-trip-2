@@ -1,6 +1,6 @@
-import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate } from '../utils/common.js';
 import { getPointViewData, getDateTimeDifference } from '../utils/point.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createPointTemplate = ({ point, checkedOffers, destination }) => {
 
