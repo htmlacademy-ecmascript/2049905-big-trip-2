@@ -60,6 +60,55 @@ export default class PointPresenter {
     remove(prevEditPointComponent);
   }
 
+  setSaving() {
+    if (this.#isEditing) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+        isDeleting: false,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#isEditing) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: false,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setResetting() {
+    if (!this.#isEditing) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const reset = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(reset);
+  }
+
+  resetView() {
+    if (this.#isEditing) {
+      this.#editPointComponent.reset(this.#point);
+      this.#replaceEditFormToPoint();
+    }
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
+  }
+
   #replacePointToEditForm() {
     replace(this.#editPointComponent, this.#pointComponent);
     this.#isEditing = true;
@@ -113,53 +162,4 @@ export default class PointPresenter {
       point
     );
   };
-
-  setSaving() {
-    if (this.#isEditing) {
-      this.#editPointComponent.updateElement({
-        isDisabled: true,
-        isSaving: true,
-        isDeleting: false,
-      });
-    }
-  }
-
-  setDeleting() {
-    if (this.#isEditing) {
-      this.#editPointComponent.updateElement({
-        isDisabled: true,
-        isSaving: false,
-        isDeleting: true,
-      });
-    }
-  }
-
-  setResetting() {
-    if (!this.#isEditing) {
-      this.#pointComponent.shake();
-      return;
-    }
-
-    const reset = () => {
-      this.#editPointComponent.updateElement({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this.#editPointComponent.shake(reset);
-  }
-
-  resetView() {
-    if (this.#isEditing) {
-      this.#editPointComponent.reset(this.#point);
-      this.#replaceEditFormToPoint();
-    }
-  }
-
-  destroy() {
-    remove(this.#pointComponent);
-    remove(this.#editPointComponent);
-  }
 }
