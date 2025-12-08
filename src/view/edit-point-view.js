@@ -336,9 +336,18 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
 
     const value = evt.target.value;
+
+    if (value === '') {
+      this._setState({
+        ...this._state,
+        basePrice: 0
+      });
+      return;
+    }
+
     const newPrice = Number(value);
 
-    if (Number.isNaN(newPrice) || newPrice < 0) {
+    if (Number.isNaN(newPrice) || newPrice <= 0) {
       return;
     }
 
