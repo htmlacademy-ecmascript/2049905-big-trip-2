@@ -1,3 +1,5 @@
+import { UpdateType } from '../const.js';
+
 export default class DestinationsModel {
   #destinations = null;
   #pointsApiService = null;
@@ -13,6 +15,7 @@ export default class DestinationsModel {
       this.#destinations = destinations;
     } catch (error) {
       this.#destinations = [];
+      this._notify(UpdateType.ERROR);
     }
   }
 

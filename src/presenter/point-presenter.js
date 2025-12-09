@@ -9,15 +9,15 @@ export default class PointPresenter {
   #pointComponent = null;
   #editPointComponent = null;
   #pointsListContainer = null;
-  #handleDataChange = null;
+  #handlePointChange = null;
   #handleModeChange = null;
 
   #isEditing = false;
 
-  constructor({ pointsListContainer, onDataChange, onModeChange }) {
+  constructor({ pointsListContainer, handlePointChange, handleModeChange }) {
     this.#pointsListContainer = pointsListContainer;
-    this.#handleDataChange = onDataChange;
-    this.#handleModeChange = onModeChange;
+    this.#handlePointChange = handlePointChange;
+    this.#handleModeChange = handleModeChange;
   }
 
   init({ point, offers, destinations }) {
@@ -30,17 +30,17 @@ export default class PointPresenter {
       point,
       offers,
       destinations,
-      onEditClick: this.#handleEditClick,
-      onFavoriteClick: this.#handleFavoriteClick
+      handleEditClick: this.#handleEditClick,
+      handleFavoriteClick: this.#handleFavoriteClick
     });
 
     this.#editPointComponent = new EditPointView({
       point,
       offers,
       destinations,
-      onCloseClick: this.#handleCloseClick,
-      onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick
+      handleCloseClick: this.#handleCloseClick,
+      handleFormSubmit: this.#handleFormSubmit,
+      handleDeleteClick: this.#handleDeleteClick
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -114,16 +114,16 @@ export default class PointPresenter {
   #replacePointToEditForm() {
     replace(this.#editPointComponent, this.#pointComponent);
     this.#isEditing = true;
-    document.addEventListener('keydown', this.#handleDocumentKeydown);
+    document.addEventListener('keydown', this.#documentKeydownHandler);
   }
 
   #replaceEditFormToPoint() {
     replace(this.#pointComponent, this.#editPointComponent);
     this.#isEditing = false;
-    document.removeEventListener('keydown', this.#handleDocumentKeydown);
+    document.removeEventListener('keydown', this.#documentKeydownHandler);
   }
 
-  #handleDocumentKeydown = (evt) => {
+  #documentKeydownHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.resetView();
@@ -138,7 +138,7 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite}
@@ -146,7 +146,7 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (update) => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       update
@@ -158,7 +158,7 @@ export default class PointPresenter {
   };
 
   #handleDeleteClick = (point) => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
       point

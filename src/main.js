@@ -10,7 +10,7 @@ import PointsApiService from './points-api-service.js';
 const tripInfoContainer = document.querySelector('.trip-main');
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
-const newEventBtn = document.querySelector('.trip-main__event-add-btn');
+const newEventButton = document.querySelector('.trip-main__event-add-btn');
 
 const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 
@@ -30,7 +30,7 @@ const tripPresenter = new TripPresenter({
   offersModel,
   destinationsModel,
   filterModel,
-  newEventBtn
+  newEventButton
 });
 
 const filterPresenter = new FilterPresenter({

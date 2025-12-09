@@ -24,16 +24,22 @@ const createPointTemplate = ({ point, checkedOffers, destination }) => {
     `
       <li class="trip-events__item">
         <div class="event">
-          <time class="event__date" datetime=${formatDate(dateFrom, 'FULL_DATE')}>${formatDate(dateFrom, 'DATE')}</time>
+          <time class="event__date" datetime=${formatDate(dateFrom, 'FULL_DATE')}>
+            ${formatDate(dateFrom, 'DATE')}
+          </time>
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
           </div>
           <h3 class="event__title">${type} ${destination.name}</h3>
           <div class="event__schedule">
             <p class="event__time">
-              <time class="event__start-time" datetime=${formatDate(dateFrom, 'FULL_DATE_TIME')}>${formatDate(dateFrom, 'TIME')}</time>
+              <time class="event__start-time" datetime=${formatDate(dateFrom, 'FULL_DATE_TIME')}>
+                ${formatDate(dateFrom, 'TIME')}
+              </time>
               &mdash;
-              <time class="event__end-time" datetime=${formatDate(dateTo, 'FULL_DATE_TIME')}>${formatDate(dateTo, 'TIME')}</time>
+              <time class="event__end-time" datetime=${formatDate(dateTo, 'FULL_DATE_TIME')}>
+                ${formatDate(dateTo, 'TIME')}
+              </time>
             </p>
             <p class="event__duration">${getDateTimeDifference(dateFrom, dateTo)}</p>
           </div>
@@ -47,7 +53,8 @@ const createPointTemplate = ({ point, checkedOffers, destination }) => {
           <button class="event__favorite-btn ${favoritePoint}" type="button">
             <span class="visually-hidden">Add to favorite</span>
             <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145
+              8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
             </svg>
           </button>
           <button class="event__rollup-btn" type="button">
@@ -63,16 +70,17 @@ export default class PointView extends AbstractView {
   #point = null;
   #offers = null;
   #destinations = null;
-  #callbacks = {};
+  #handleEditClick;
+  #handleFavoriteClick;
 
-  constructor({ point, offers, destinations, onEditClick, onFavoriteClick }) {
+  constructor({ point, offers, destinations, handleEditClick, handleFavoriteClick }) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
 
-    this.#callbacks.editClick = onEditClick;
-    this.#callbacks.favoriteClick = onFavoriteClick;
+    this.#handleEditClick = handleEditClick;
+    this.#handleFavoriteClick = handleFavoriteClick;
 
     this.#setHandlers();
   }
@@ -93,19 +101,19 @@ export default class PointView extends AbstractView {
 
   #setHandlers() {
     this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#handleEditClick);
+      .addEventListener('click', this.#rollupBtnClickHandler);
 
     this.element.querySelector('.event__favorite-btn')
-      .addEventListener('click', this.#handleFavoriteClick);
+      .addEventListener('click', this.#favoriteBtnClickHandler);
   }
 
-  #handleEditClick = (evt) => {
+  #rollupBtnClickHandler = (evt) => {
     evt.preventDefault();
-    this.#callbacks.editClick?.();
+    this.#handleEditClick?.();
   };
 
-  #handleFavoriteClick = (evt) => {
+  #favoriteBtnClickHandler = (evt) => {
     evt.preventDefault();
-    this.#callbacks.favoriteClick?.();
+    this.#handleFavoriteClick?.();
   };
 }
