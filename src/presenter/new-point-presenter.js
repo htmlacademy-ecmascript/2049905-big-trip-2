@@ -9,10 +9,10 @@ export default class NewPointPresenter {
   #handlePointChange = null;
   #handleNewPointFormClose = null;
 
-  constructor({ pointsListContainer, onPointChange, onNewPointFormClose }) {
+  constructor({ pointsListContainer, handlePointChange, handleNewPointFormClose }) {
     this.#pointsListContainer = pointsListContainer;
-    this.#handlePointChange = onPointChange;
-    this.#handleNewPointFormClose = onNewPointFormClose;
+    this.#handlePointChange = handlePointChange;
+    this.#handleNewPointFormClose = handleNewPointFormClose;
   }
 
   init(offers, destinations) {
@@ -24,13 +24,13 @@ export default class NewPointPresenter {
       point: getDefaultPoint(),
       offers: offers,
       destinations: destinations,
-      onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick
+      handleFormSubmit: this.#handleFormSubmit,
+      handleDeleteClick: this.#handleDeleteClick
     });
 
     render(this.#editPointComponent, this.#pointsListContainer, RenderPosition.AFTERBEGIN);
 
-    document.addEventListener('keydown', this.#handleDocumentKeydown);
+    document.addEventListener('keydown', this.#documentKeydownHandler);
   }
 
   destroy() {
@@ -43,7 +43,7 @@ export default class NewPointPresenter {
     remove(this.#editPointComponent);
     this.#editPointComponent = null;
 
-    document.removeEventListener('keydown', this.#handleDocumentKeydown);
+    document.removeEventListener('keydown', this.#documentKeydownHandler);
   }
 
   setSaving() {
@@ -66,7 +66,7 @@ export default class NewPointPresenter {
     this.#editPointComponent.shake(resetFormState);
   }
 
-  #handleDocumentKeydown = (evt) => {
+  #documentKeydownHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.destroy();

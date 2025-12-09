@@ -34,7 +34,7 @@ const getPointViewData = (point, offers, destinations) => {
   const offersByType = offers.find((item) => item.type === point.type)?.offers ?? [];
 
   const destination =
-    (destinations.find((dest) => dest.id === point.destination) || getDefaultPoint())
+    (destinations.find((destinationItem) => destinationItem.id === point.destination) || getDefaultPoint())
     ?? null;
 
   const selectedOfferIds = point.offers ?? [];

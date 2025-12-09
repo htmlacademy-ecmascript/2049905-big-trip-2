@@ -43,7 +43,7 @@ const NoPointsTextByType = {
 };
 
 const TimeLimit = {
-  LOWER_LIMIT: 250,
+  LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
 
