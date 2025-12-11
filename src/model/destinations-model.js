@@ -9,6 +9,10 @@ export default class DestinationsModel {
     this.#pointsApiService = pointsApiService;
   }
 
+  get destinations() {
+    return this.#destinations;
+  }
+
   async init() {
     try {
       const destinations = await this.#pointsApiService.destinations;
@@ -17,9 +21,5 @@ export default class DestinationsModel {
       this.#destinations = [];
       this._notify(UpdateType.ERROR);
     }
-  }
-
-  get destinations() {
-    return this.#destinations;
   }
 }
