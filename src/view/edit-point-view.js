@@ -147,15 +147,13 @@ const createEditPointTemplate = ({ point, offers, checkedOffers, destinations, d
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
               <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text"
-                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')}
-                  ${formatDate(dateFrom, 'TIME')}` : ''}"
+                name="event-start-time" value="${dateFrom ? `${formatDate(dateFrom, 'CALENDAR_DATE')} ${formatDate(dateFrom, 'TIME')}` : ''}"
                 ${isDisabled ? 'disabled' : ''}
               >
               &mdash;
               <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
               <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text"
-                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')}
-                  ${formatDate(dateTo, 'TIME')}` : ''}"
+                name="event-end-time" value="${dateTo ? `${formatDate(dateTo, 'CALENDAR_DATE')} ${formatDate(dateTo, 'TIME')}` : ''}"
                 ${isDisabled ? 'disabled' : ''}
               >
             </div>
@@ -355,19 +353,11 @@ export default class EditPointView extends AbstractStatefulView {
 
     const value = evt.target.value;
 
-    if (value === '') {
-      return;
-    }
-
     const newPrice = Number(value);
-
-    if (Number.isNaN(newPrice) || newPrice <= 0) {
-      return;
-    }
 
     this._setState({
       ...this._state,
-      basePrice: newPrice,
+      basePrice: newPrice
     });
   };
 

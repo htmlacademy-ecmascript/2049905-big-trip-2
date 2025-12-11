@@ -15,6 +15,10 @@ export default class PointsModel extends Observable {
     this.#destinationsModel = destinationsModel;
   }
 
+  get points() {
+    return this.#points;
+  }
+
   async init() {
     try {
       await Promise.all([
@@ -28,10 +32,6 @@ export default class PointsModel extends Observable {
       this.#points = [];
       this._notify(UpdateType.ERROR);
     }
-  }
-
-  get points() {
-    return this.#points;
   }
 
   async updatePoint(updateType, update) {
